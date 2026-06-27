@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ScanSale.ViewModels"
+             xmlns:zxing="clr-namespace:ZXing.Net.Maui.Controls;assembly=ZXing.Net.Maui.Controls"
+             x:Class="ScanSale.Views.NewSalePage"
+             x:DataType="vm:NewSaleViewModel"
+             Title="New Sale">
+    <Grid RowDefinitions="Auto,Auto,*,Auto" Padding="10" RowSpacing="8">
+
+        <!-- Scan controls -->
+        <VerticalStackLayout Grid.Row="0" Spacing="8">
+            <Button Text="{Binding ScanButtonLabel}" Command="{Binding ToggleScanCommand}" />
+            <Border x:Name="ScannerHost" IsVisible="{Binding IsScanning}" HeightRequest="240"
+                    StrokeShape="RoundRectangle 10" Stroke="#22000000" />
+            <Label Text="{Binding Status}" FontSize="15" FontAttributes="Bold" TextColor="#1565C0"
+                   IsVisible="{Binding Status, Converter={StaticResource IsStringNotEmpty}}" />
+        </VerticalStackLayout>
+
+        <BoxView Grid.Row="1" HeightRequest="1" Color="#22000000" />
+
+        <!-- Cart -->
+        <CollectionView Grid.Row="2" ItemsSource="{Binding Cart}" SelectionMode="None">
+            <CollectionView.EmptyView>
+                <Label Text="Cart is empty — tap “Add item (scan)” to scan an item." HorizontalOptions="Center" VerticalOptions="Center" TextColor="Gray" />
+            </CollectionView.EmptyView>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="vm:CartLine">
+                    <Grid ColumnDefinitions="*,Auto,Auto" Padding="6,8" ColumnSpacing="6">
+                        <VerticalStackLayout Grid.Column="0">
+                            <Label Text="{Binding Description}" FontAttributes="Bold" />
+                            <Label Text="{Binding UnitPrice, StringFormat='{0:C} ea'}" FontSize="12" TextColor="Gray" />
+                        </VerticalStackLayout>
+                        <HorizontalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
+                            <Button Text="–" WidthRequest="40" Padding="0"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:NewSaleViewModel}}, Path=DecrementCommand}"
+                                    CommandParameter="{Binding .}" />
+                            <Label Text="{Binding Quantity}" WidthRequest="28" HorizontalTextAlignment="Center" VerticalOptions="Center" />
+                            <Button Text="+" WidthRequest="40" Padding="0"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:NewSaleViewModel}}, Path=IncrementCommand}"
+                                    CommandParameter="{Binding .}" />
+                        </HorizontalStackLayout>
+                        <Label Grid.Column="2" Text="{Binding LineTotal, StringFormat='{0:C}'}" FontAttributes="Bold"
+                               VerticalOptions="Center" WidthRequest="80" HorizontalTextAlignment="End" />
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!-- Totals + actions -->
+        <VerticalStackLayout Grid.Row="3" Spacing="4">
+            <Grid ColumnDefinitions="*,Auto">
+                <Label Grid.Column="0" Text="Subtotal" />
+                <Label Grid.Column="1" Text="{Binding Subtotal, StringFormat='{0:C}'}" />
+            </Grid>
+            <Grid ColumnDefinitions="*,Auto">
+                <Label Grid.Column="0" Text="Tax" />
+                <Label Grid.Column="1" Text="{Binding TaxTotal, StringFormat='{0:C}'}" />
+            </Grid>
+            <Grid ColumnDefinitions="*,Auto">
+                <Label Grid.Column="0" Text="Total" FontAttributes="Bold" FontSize="18" />
+                <Label Grid.Column="1" Text="{Binding Total, StringFormat='{0:C}'}" FontAttributes="Bold" FontSize="18" />
+            </Grid>
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="8" Margin="0,4,0,0">
+                <Button Grid.Column="0" Text="Clear" Command="{Binding ClearCommand}"
+                        BackgroundColor="Transparent" TextColor="#D32F2F" IsEnabled="{Binding IsEmpty, Converter={StaticResource InverseBool}}" />
+                <Button Grid.Column="1" Text="Complete sale" Command="{Binding CompleteCommand}"
+                        IsEnabled="{Binding IsEmpty, Converter={StaticResource InverseBool}}" />
+            </Grid>
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage>

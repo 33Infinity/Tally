@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ScanSale.ViewModels"
+             x:Class="ScanSale.Views.PaywallPage"
+             x:DataType="vm:PaywallViewModel"
+             Title="Tally Pro"
+             Shell.NavBarIsVisible="False">
+    <ScrollView>
+        <VerticalStackLayout Spacing="16" Padding="28" VerticalOptions="Center"
+                             MaximumWidthRequest="440" HorizontalOptions="Center">
+
+            <Label Text="Tally Pro" FontSize="32" FontAttributes="Bold"
+                   HorizontalOptions="Center" TextColor="#4F46E5" />
+            <Label Text="{Binding PriceLine}" FontSize="16" TextColor="Gray" HorizontalOptions="Center" />
+
+            <VerticalStackLayout Spacing="8" Margin="0,12">
+                <Label Text="•  Unlimited items and sales" FontSize="15" />
+                <Label Text="•  Scan-to-sell, fully offline" FontSize="15" />
+                <Label Text="•  Sales history kept on your device" FontSize="15" />
+            </VerticalStackLayout>
+
+            <Button Text="Start 7-day free trial" Command="{Binding StartTrialCommand}"
+                    IsEnabled="{Binding Busy, Converter={StaticResource InverseBool}}"
+                    BackgroundColor="#4F46E5" TextColor="White" Margin="0,8,0,0" />
+
+            <ActivityIndicator IsRunning="{Binding Busy}" IsVisible="{Binding Busy}" HorizontalOptions="Center" />
+
+            <Label Text="{Binding Error}" TextColor="#D32F2F" HorizontalOptions="Center"
+                   IsVisible="{Binding Error, Converter={StaticResource IsStringNotEmpty}}" />
+
+            <Button Text="Restore purchase" Command="{Binding RestoreCommand}"
+                    BackgroundColor="Transparent" TextColor="#4F46E5" />
+            <Button Text="Sign out" Command="{Binding SignOutCommand}"
+                    BackgroundColor="Transparent" TextColor="Gray" />
+
+            <Label Text="Billed through Google Play. Cancel anytime in Play Store › Subscriptions."
+                   FontSize="11" TextColor="Gray" HorizontalOptions="Center" HorizontalTextAlignment="Center" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

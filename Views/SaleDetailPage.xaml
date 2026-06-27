@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ScanSale.ViewModels"
+             xmlns:m="clr-namespace:ScanSale.Models"
+             x:Class="ScanSale.Views.SaleDetailPage"
+             x:DataType="vm:SaleDetailViewModel"
+             Title="Sale">
+    <Grid RowDefinitions="Auto,*,Auto" Padding="12">
+        <Label Grid.Row="0" Text="{Binding Date, StringFormat='{0:f}'}" FontAttributes="Bold" FontSize="16" Margin="4,0,4,8" />
+
+        <CollectionView Grid.Row="1" ItemsSource="{Binding Lines}" SelectionMode="None">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="m:SaleLine">
+                    <Grid ColumnDefinitions="*,Auto" Padding="6,8">
+                        <VerticalStackLayout Grid.Column="0">
+                            <Label Text="{Binding Description}" FontAttributes="Bold" />
+                            <Label FontSize="12" TextColor="Gray">
+                                <Label.Text>
+                                    <MultiBinding StringFormat="{}{0} × {1:C}  (tax {2}%)">
+                                        <Binding Path="Quantity" />
+                                        <Binding Path="UnitPrice" />
+                                        <Binding Path="TaxRate" />
+                                    </MultiBinding>
+                                </Label.Text>
+                            </Label>
+                        </VerticalStackLayout>
+                        <Label Grid.Column="1" Text="{Binding LineTotal, StringFormat='{0:C}'}" FontAttributes="Bold" VerticalOptions="Center" />
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <VerticalStackLayout Grid.Row="2" Spacing="4" Margin="4,8,4,0">
+            <Grid ColumnDefinitions="*,Auto"><Label Text="Items" /><Label Grid.Column="1" Text="{Binding ItemCount}" /></Grid>
+            <Grid ColumnDefinitions="*,Auto"><Label Text="Subtotal" /><Label Grid.Column="1" Text="{Binding Subtotal, StringFormat='{0:C}'}" /></Grid>
+            <Grid ColumnDefinitions="*,Auto"><Label Text="Tax" /><Label Grid.Column="1" Text="{Binding TaxTotal, StringFormat='{0:C}'}" /></Grid>
+            <Grid ColumnDefinitions="*,Auto"><Label Text="Total" FontAttributes="Bold" FontSize="18" /><Label Grid.Column="1" Text="{Binding Total, StringFormat='{0:C}'}" FontAttributes="Bold" FontSize="18" /></Grid>
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage>

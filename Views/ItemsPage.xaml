@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ScanSale.ViewModels"
+             xmlns:m="clr-namespace:ScanSale.Models"
+             x:Class="ScanSale.Views.ItemsPage"
+             x:DataType="vm:ItemsViewModel"
+             Title="Items">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Add" Command="{Binding AddCommand}" />
+        <ToolbarItem Text="Sign out" Command="{Binding SignOutCommand}" Order="Secondary" />
+    </ContentPage.ToolbarItems>
+
+    <Grid RowDefinitions="*,Auto">
+        <CollectionView ItemsSource="{Binding Items}" SelectionMode="None" Margin="8">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="m:Item">
+                    <Border Margin="4" Padding="12" StrokeShape="RoundRectangle 10" Stroke="#22000000">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ItemsViewModel}}, Path=EditCommand}"
+                                CommandParameter="{Binding .}" />
+                        </Border.GestureRecognizers>
+                        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto">
+                            <Label Grid.Row="0" Grid.Column="0" Text="{Binding Description}" FontAttributes="Bold" FontSize="16" />
+                            <Label Grid.Row="0" Grid.Column="1" Text="{Binding Price, StringFormat='{0:C}'}" FontAttributes="Bold" />
+                            <Label Grid.Row="1" Grid.Column="0" Text="{Binding Code, StringFormat='Item #{0}'}" FontSize="13" TextColor="Gray" />
+                            <Label Grid.Row="1" Grid.Column="1" Text="{Binding TaxRate, StringFormat='Tax {0}%'}" FontSize="13" TextColor="Gray" />
+                            <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding QrCode, StringFormat='QR: {0}'}" FontSize="12" TextColor="#888" />
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <Label Grid.Row="0" Text="No items yet. Tap “Add” to create one." IsVisible="{Binding IsEmpty}"
+               HorizontalOptions="Center" VerticalOptions="Center" TextColor="Gray" />
+
+        <Button Grid.Row="1" Text="Add item" Command="{Binding AddCommand}" Margin="12" />
+    </Grid>
+</ContentPage>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ScanSale.ViewModels"
+             x:Class="ScanSale.Views.LoginPage"
+             x:DataType="vm:LoginViewModel"
+             Title="Tally"
+             Shell.NavBarIsVisible="False">
+    <ScrollView>
+        <VerticalStackLayout Spacing="18" Padding="28" VerticalOptions="Center" MaximumWidthRequest="420" HorizontalOptions="Center">
+            <Label Text="Tally" FontSize="34" FontAttributes="Bold" HorizontalOptions="Center" TextColor="#4F46E5" />
+            <Label Text="Ring up sales, offline" FontSize="15" TextColor="Gray" HorizontalOptions="Center" />
+
+            <Label Text="Username" FontAttributes="Bold" Margin="0,12,0,0" />
+            <Entry Text="{Binding Username}" Placeholder="e.g. astore" ReturnType="Next" />
+
+            <Label Text="PIN" FontAttributes="Bold" />
+            <Entry Text="{Binding Pin}" Placeholder="at least 4 digits" IsPassword="True"
+                   Keyboard="Numeric" ReturnType="Go" ReturnCommand="{Binding ContinueCommand}" />
+
+            <Label Text="{Binding Error}" TextColor="#D32F2F" IsVisible="{Binding Error, Converter={StaticResource IsStringNotEmpty}}" />
+
+            <Button Text="Continue" Command="{Binding ContinueCommand}" IsEnabled="{Binding Busy, Converter={StaticResource InverseBool}}" Margin="0,8,0,0" />
+            <ActivityIndicator IsRunning="{Binding Busy}" IsVisible="{Binding Busy}" />
+
+            <Label Text="New username? A profile is created automatically. Data stays on this device."
+                   FontSize="12" TextColor="Gray" HorizontalTextAlignment="Center" Margin="0,12,0,0" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
