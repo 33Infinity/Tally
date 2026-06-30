@@ -1,0 +1,15 @@
+# Build output
+bin/
+obj/
+
+# Signing — NEVER commit these
+signing/
+*.keystore
+*.jks
+*.keystore.txt
+keystore-credentials.txt
+
+# OS / IDE
+.vs/
+*.user
+.DS_Store
